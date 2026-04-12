@@ -42,16 +42,28 @@ pip install -r requirements.txt
 python manage.py migrate
 ```
 
-5. Start development server:
+5. Create admin account:
+
+```bash
+python manage.py createsuperuser
+```
+
+6. Start development server:
 
 ```bash
 python manage.py runserver
 ```
 
-6. Open in browser:
+7. Open in browser:
 
 ```text
 http://127.0.0.1:8000/
+```
+
+8. Admin panel:
+
+```text
+http://127.0.0.1:8000/admin/
 ```
 
 ## Reasoning
@@ -111,3 +123,31 @@ Example embed format:
 1. Existing backend functionality is preserved.
 2. Redesign focuses on UX quality, readability, and responsive behavior for student users.
 3. See `docs/Getting_Started.md` for additional project-specific information.
+
+## FAQ (Updated)
+
+### 1) Why does Propose Workshop redirect to Django admin?
+
+If you are logged in as superuser, this project intentionally redirects you to admin for workshop routes. Use a normal coordinator account for the proposal flow.
+
+### 2) How can I create a normal user account?
+
+Use either method below:
+
+1. Register from site (recommended for coordinator flow).
+2. Or create from admin:
+	- Admin > Users > Add user
+	- Keep superuser unchecked
+	- Fill required profile fields in Admin > Profiles
+
+### 3) Why am I not receiving activation email?
+
+In development, activation email is printed to terminal because EMAIL_BACKEND is set to console backend in settings.
+
+### 4) How do I stop runserver?
+
+Press Ctrl + C in the terminal where runserver is active.
+
+### 5) What about the "User has no profile" login error?
+
+This has been handled in code with safer profile checks and automatic profile creation for non-superusers.

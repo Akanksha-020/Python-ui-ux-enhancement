@@ -1,42 +1,105 @@
-# Guide to install and get this website running
+# Guide To Install And Run The Website
 
-### Follow below given Steps to get started
-> __NOTE__: Use Python3 
-1. Clone this repo.
-    > git clone https://github.com/FOSSEE/workshop_booking.git
+## Quick Start
 
-2. Create a virtual environment and install all the required packages from requirements.txt
-    > pip install -r requirements.txt 
+> NOTE: Use Python 3.
 
-3. Make Migrations and Migrate
-    > python manage.py makemigrations\
-    > python manage.py migrate
+1. Clone the repository.
 
-4. Create Super User
-    > python manage.py createsuperuser
+```bash
+git clone https://github.com/FOSSEE/workshop_booking.git
+cd workshop_booking
+```
 
-5. Start Server
-    > python manage.py runserver
+2. Create and activate virtual environment.
 
-6. Goto admin page and login using superuser credentials
-    > localhost:8000/admin
+```bash
+python -m venv .venv
+# Windows
+.venv\Scripts\activate
+```
 
-7. Goto Groups and create one group called __instructor__ and give it all permissions.
+3. Install requirements.
 
-8. By default when a user registers, he is assigned a coordinator position, using the admin panel set the required users profile position as instructor and add him/her in instructor group along with the required permissions.
+```bash
+pip install -r requirements.txt
+```
 
-9. Under *settings.py* file see to it that all required variables are set then you're good to go!
+4. Run database migrations.
 
-### Instructor specific steps
+```bash
+python manage.py migrate
+```
 
-1. An instructor can create workshops as per his/her availibility in __Create Workshop__ tab.
+5. Create superuser.
 
-2. Instructor can see monthly workshop count, upcoming workshop etc. in Statistics > Workshop Statistics
+```bash
+python manage.py createsuperuser
+```
 
-3. Instructors can view and post comments on coordinator's profile from Profile Statistics or Workshop Status page.
+6. Start server.
 
+```bash
+python manage.py runserver
+```
 
-### Coordinator specific steps
+7. Open admin and login.
 
-1. A coordinator can sent workshop proposal based on his/her convenience under Workshops > Propose a Workshop option.
+```text
+http://127.0.0.1:8000/admin
+```
+
+## Role Setup
+
+1. Create one group named instructor in Admin > Groups.
+2. Assign required permissions to the instructor group.
+3. For instructor users:
+   - Set Profile position to instructor.
+   - Add user to instructor group.
+4. For coordinator users:
+   - Keep Profile position as coordinator.
+
+## Instructor Specific Flow
+
+1. Instructor can accept or manage workshops from Workshop Status.
+2. Instructor can view analytics in Statistics > Workshop Statistics.
+3. Instructor can post/view comments on coordinator profile and workshop pages.
+
+## Coordinator Specific Flow
+
+1. Coordinator can submit workshop proposals from Workshops > Propose Workshop.
+
+## FAQ / Troubleshooting
+
+### 1) Why does Propose Workshop open Django admin for my account?
+
+Because superusers are intentionally redirected to admin pages in this project flow. Use a normal coordinator account for the workshop proposal flow.
+
+### 2) How do I create a normal user quickly?
+
+Use admin:
+
+1. Admin > Users > Add user.
+2. Ensure superuser is unchecked.
+3. Open Admin > Profiles and fill required fields for that user.
+4. Set position to coordinator or instructor as needed.
+5. If needed for local testing, mark is_email_verified as true.
+
+### 3) I registered from the site but did not receive activation email.
+
+In development mode this project uses console email backend, so activation links are printed in the runserver terminal instead of inbox.
+
+Current setting:
+
+- workshop_portal/settings.py uses django.core.mail.backends.console.EmailBackend.
+
+To use real email, configure SMTP values in local_settings.py and change EMAIL_BACKEND.
+
+### 4) How to stop the server?
+
+Press Ctrl + C in the terminal where runserver is running.
+
+### 5) I saw "User has no profile" error before.
+
+The app now includes safeguards to avoid this crash during login by handling missing profiles safely and creating default profiles for non-superusers when needed.
 
