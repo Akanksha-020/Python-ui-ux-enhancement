@@ -2,42 +2,52 @@
 
 {% block title %} Statistics {% endblock %}
 
+{% block extra-dependencies %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script>
+{% endblock %}
+
 {% block content %}
-<div class="container-fluid">
+<section class="container-fluid dashboard-shell">
+    <div class="hero-banner hero-banner--compact mb-4">
+        <p class="hero-kicker">Public analytics</p>
+        <h1 class="hero-title h3 mb-2">Workshop Statistics</h1>
+        <p class="hero-copy mb-0">Explore workshop data by date range, state, and workshop type.</p>
+    </div>
+
     <div class="row">
-        <div class="col-md-3">
+        <div class="col-lg-3 mb-4 mb-lg-0">
             <form method="GET">
-                <div class="card">
-                    <div class="card-header">
+                <div class="card h-100">
+                    <div class="card-header bg-transparent border-0 pt-3 pb-0">
                         <div class="row">
                             <div class="col-md-8">
-                                <h3><u>Filters</u></h3>
+                                <h2 class="h5 mb-0">Filters</h2>
                             </div>
                             <div class="col-md-4">
-                                <a href="{% url 'statistics_app:public' %}" class="btn btn-outline-info">
+                                <a href="{% url 'statistics_app:public' %}" class="btn btn-outline-info btn-sm">
                                     <i class="fa fa-times"></i>&nbsp;Clear
                                 </a>
                             </div>
                         </div>
                     </div>
                     <div class="card-body">
-                        <div>From date: {{form.from_date}}</div>
-                        <div>To date: {{form.to_date}}</div>
-                        <div>Workshop: {{form.workshop_type}}</div>
-                        <div>State: {{form.state}}</div>
-                        <div>{{form.sort.help_text}}: {{form.sort}}</div>
+                        <div class="mb-2">From date: {{form.from_date}}</div>
+                        <div class="mb-2">To date: {{form.to_date}}</div>
+                        <div class="mb-2">Workshop: {{form.workshop_type}}</div>
+                        <div class="mb-2">State: {{form.state}}</div>
+                        <div class="mb-2">{{form.sort.help_text}}: {{form.sort}}</div>
                         {% if request.user.is_authenticated %}
-                        <div>{{form.show_workshops.help_text}}: {{form.show_workshops}}</div>
+                        <div class="mb-2">{{form.show_workshops.help_text}}: {{form.show_workshops}}</div>
                         {% endif %}
-                        <br>
+
                         <div class="row justify-content-center">
-                            <div class="col-md-4">
-                                <button type="submit" class="btn btn-success">
+                            <div class="col-6 col-md-5 mb-2 mb-md-0">
+                                <button type="submit" class="btn btn-success btn-block">
                                     <i class="fa fa-eye"></i>&nbsp;View
                                 </button>
                             </div>
-                            <div class="col-md-6">
-                                <button type="submit" class="btn btn-info" name="download" value="download">
+                            <div class="col-6 col-md-7">
+                                <button type="submit" class="btn btn-info btn-block" name="download" value="download">
                                     <i class="fa fa-download"></i>&nbsp;Download
                                 </button>
                             </div>
@@ -46,51 +56,54 @@
                 </div>
             </form>
         </div>
-        <div class="col">
-            <div class="row">
-                <div class="col-md-6">
+
+        <div class="col-lg-9">
+            <div class="row align-items-center mb-3">
+                <div class="col-md-6 mb-2 mb-md-0">
                     {% include "statistics_app/paginator.html" %}
                 </div>
-                <div class="col-md-3">
-                    <button class="btn btn-info" id="state_graph">
+                <div class="col-6 col-md-3">
+                    <button class="btn btn-info btn-block" id="state_graph">
                         <i class="fa fa-bar-chart"></i>&nbsp;State chart
                     </button>
                 </div>
-                <div class="col-md-3">
-                    <button class="btn btn-info" id="type_graph">
+                <div class="col-6 col-md-3">
+                    <button class="btn btn-info btn-block" id="type_graph">
                         <i class="fa fa-bar-chart"></i>&nbsp;Workshops chart
                     </button>
                 </div>
             </div>
-            <table class="table table-responsive-sm">
-                <thead>
-                    <tr>
-                        <th>Sr No.</th>
-                        <th>Coordinator Name</th>
-                        <th>Institute Name</th>
-                        <th>Instructor Name</th>
-                        <th>Workshop Name</th>
-                        <th>Workshop Date</th>
-                    </tr>
-                </thead>
-                {% csrf_token %}
-                {% for workshop in objects %}
-                    <tbody>
+            <div class="card p-2 p-md-3">
+                <table class="table table-responsive-sm mb-0">
+                    <thead>
                         <tr>
-                            <td>{{ forloop.counter0|add:objects.start_index}}</td>
-                            <td>{{ workshop.coordinator.get_full_name | capfirst }}</td>
-                            <td>{{ workshop.coordinator.profile.institute | capfirst }}</td>
-                            <td>{{ workshop.instructor.get_full_name | capfirst }}</td>
-                            <td>{{ workshop.workshop_type.name }}</td>
-                            <td>{{ workshop.date | date}}</td>
+                            <th>Sr No.</th>
+                            <th>Coordinator Name</th>
+                            <th>Institute Name</th>
+                            <th>Instructor Name</th>
+                            <th>Workshop Name</th>
+                            <th>Workshop Date</th>
                         </tr>
-                    </tbody>
-                {% endfor %}
-            </table>
+                    </thead>
+                    {% csrf_token %}
+                    {% for workshop in objects %}
+                        <tbody>
+                            <tr>
+                                <td>{{ forloop.counter0|add:objects.start_index}}</td>
+                                <td>{{ workshop.coordinator.get_full_name | capfirst }}</td>
+                                <td>{{ workshop.coordinator.profile.institute | capfirst }}</td>
+                                <td>{{ workshop.instructor.get_full_name | capfirst }}</td>
+                                <td>{{ workshop.workshop_type.name }}</td>
+                                <td>{{ workshop.date | date}}</td>
+                            </tr>
+                        </tbody>
+                    {% endfor %}
+                </table>
+            </div>
             {% include "statistics_app/paginator.html" %}
         </div>
     </div>
-</div>
+</section>
 
 <!-- The Modal -->
 <div id="dialog" title="Workshops Statistics">
