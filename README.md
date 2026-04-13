@@ -16,8 +16,8 @@ The core Django structure and backend flow are unchanged. The redesign focuses o
 1. Clone repository:
 
 ```bash
-git clone https://github.com/FOSSEE/workshop_booking.git
-cd workshop_booking
+git clone https://github.com/Akanksha-020/Python-ui-ux-enhancement
+cd python-ui-ux-enhancement
 ```
 
 2. Create and activate virtual environment:
@@ -144,10 +144,6 @@ Use either method below:
 
 In development, activation email is printed to terminal because EMAIL_BACKEND is set to console backend in settings.
 
-### 4) How do I stop runserver?
-
-Press Ctrl + C in the terminal where runserver is active.
-
-### 5) What about the "User has no profile" login error?
+### 4) What about the "User has no profile" login error?
 
 This has been handled in code with safer profile checks and automatic profile creation for non-superusers.
