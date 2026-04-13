@@ -1,0 +1,88 @@
+{% extends 'workshop_app/base.html' %}
+{% load static %}
+
+{% block title %}
+    Add new Workshop type
+{% endblock %}
+
+{% block extra-dependencies %}
+{% endblock %}
+
+{% block extra-custom-scripts %}
+
+    <script src="{% static 'workshop_app/js/jquery.formset.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+    <section class="container dashboard-shell">
+        <div class="hero-banner hero-banner--compact mb-4">
+            <p class="hero-kicker">Workshop catalog</p>
+            <h1 class="hero-title h3 mb-2">View / Edit Workshop Type</h1>
+            <p class="hero-copy mb-0">Update details and attachments used by coordinators while proposing workshops.</p>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-lg-9">
+                <div class="card auth-card">
+                    <div class="card-body p-4 p-md-5">
+                        <form method="post" enctype="multipart/form-data" class="form-stack" novalidate>
+                            {% csrf_token %}
+
+                            {% for field in form %}
+                                <div class="form-group mb-3">
+                                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                                    {{ field }}
+                                    {% if field.help_text %}
+                                        <small class="form-text text-muted">{{ field.help_text }}</small>
+                                    {% endif %}
+                                    {% for error in field.errors %}
+                                        <div class="text-danger mt-1">{{ error|escape }}</div>
+                                    {% endfor %}
+                                </div>
+                            {% endfor %}
+
+                            <h2 class="h5 mt-4 mb-3">Attachments</h2>
+                            {{ form_file.management_form }}
+                            {{ form_file.non_form_errors }}
+                            {% for file_form in form_file %}
+                                <div class="inline {{ form_file.prefix }} my-4">
+                                    <div class="card p-3">
+                                        <div class="row">
+                                            <div class="col-md-10">
+                                                {% for field in file_form %}
+                                                    <div class="form-group mb-2">{{ field }}</div>
+                                                {% endfor %}
+                                            </div>
+                                            {% if file_form.id.value %}
+                                            <div class="col-md-2 text-md-right mt-2 mt-md-0">
+                                                <a href="{% url 'workshop_app:delete_attachment_file' file_form.id.value %}" class="btn btn-danger btn-sm" role="button">Delete</a>
+                                            </div>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+
+                            <div class="text-right mt-4">
+                                <button type="submit" class="btn btn-primary">Save</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script type="text/javascript">
+        $(function () {
+            $(".inline.{{ form_file.prefix }}").formset({
+                prefix: "{{ form_file.prefix }}", // The form prefix for your django formset
+                addCssClass: "btn btn-md btn-primary bordered inline-form-add", // CSS class applied to the add link
+                deleteCssClass: "hidden", // CSS class applied to the delete link
+                addText: 'Add another attachment', // Text for the add link
+                deleteText: '',
+                formCssClass: 'inline-form' // CSS class applied to each form in a formset
+            })
+        });
+    </script>
+{% endblock %}

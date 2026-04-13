@@ -1,0 +1,127 @@
+{% extends "workshop_app/base.html" %}
+{% load static %}
+
+{% block title %}
+    Propose a workshop
+{% endblock %}
+
+{% block extra-dependencies %}
+    <link rel="stylesheet" href="{% static 'workshop_app/css/jquery-ui.css' %}" type="text/css"/>
+    <script src="{% static 'workshop_app/js/jquery-ui.min.js' %}"></script>
+{% endblock %}
+
+{% block extra-custom-scripts %}
+    <script>
+        var dateToday = new Date();
+        var upto = new Date();
+
+        dateToday.setDate(dateToday.getDate() + 3);
+        upto.setFullYear(dateToday.getFullYear() + 1);
+
+        $(function () {
+            $(".datepicker").datepicker({
+                changeMonth: true,
+                changeYear: true,
+                minDate: dateToday,
+                maxDate: upto,
+                beforeShowDay: $.datepicker.noWeekends,
+            });
+
+
+            $('#disp_tnc').click(function (e) {
+                e.preventDefault()
+                if ($('#id_workshop_type').val() === '')
+                    $('.modal-body').html("<p class='text-danger'>Please select a workshop type</p>")
+                else {
+                    $.ajax({
+                        url: '/workshop/type_tnc/' + $('#id_workshop_type').val(),
+                        success: function (data) {
+                            $('.modal-body').html(data.tnc)
+                        }
+                    })
+                }
+            })
+        });
+    </script>
+{% endblock %}
+
+
+{% block content %}
+    <section class="container dashboard-shell">
+        <div class="hero-banner hero-banner--compact mb-4">
+            <p class="hero-kicker">Coordinator workflow</p>
+            <h1 class="hero-title h3 mb-2">Propose a Workshop</h1>
+            <p class="hero-copy mb-0">Choose a workshop type, pick a date, and submit it for instructor review.</p>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="surface-note mb-3">
+                    Before submitting, review the workshop in <strong>Workshop Types</strong> so you pick the correct format.
+                </div>
+
+                <div class="card auth-card">
+                    <div class="card-body p-4 p-md-5">
+                        <form method="post" class="form-stack" novalidate>
+                            {% csrf_token %}
+
+                            {% if form.non_field_errors %}
+                                {% for error in form.non_field_errors %}
+                                    <div class="alert alert-danger" role="alert">{{ error|escape }}</div>
+                                {% endfor %}
+                            {% endif %}
+
+                            <div class="form-group">
+                                <label for="{{ form.workshop_type.id_for_label }}">Workshop type</label>
+                                {{ form.workshop_type }}
+                                {% for error in form.workshop_type.errors %}
+                                    <div class="text-danger mt-1">{{ error|escape }}</div>
+                                {% endfor %}
+                            </div>
+
+                            <div class="form-group">
+                                <label for="{{ form.date.id_for_label }}">Workshop date</label>
+                                {{ form.date }}
+                                {% for error in form.date.errors %}
+                                    <div class="text-danger mt-1">{{ error|escape }}</div>
+                                {% endfor %}
+                            </div>
+
+                            <div class="form-group mb-4">
+                                <div class="d-flex align-items-start">
+                                    <div class="mr-2">{{ form.tnc_accepted }}</div>
+                                    <label class="mb-0" for="{{ form.tnc_accepted.id_for_label }}">
+                                        I accept the
+                                        <a href="#" id="disp_tnc" data-toggle="modal" data-target="#exampleModalCenter">terms and conditions</a>
+                                    </label>
+                                </div>
+                                {% for error in form.tnc_accepted.errors %}
+                                    <div class="text-danger mt-1">{{ error|escape }}</div>
+                                {% endfor %}
+                            </div>
+
+                            <button class="btn btn-primary btn-block" type="submit">Submit Proposal</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog"
+         aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Terms and Conditions</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

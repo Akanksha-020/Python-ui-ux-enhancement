@@ -1,0 +1,92 @@
+{% extends 'workshop_app/base.html' %}
+
+{% block title %}
+    View Workshop details
+{% endblock %}
+
+{% block content %}
+    <section class="container dashboard-shell">
+        <div class="hero-banner hero-banner--compact mb-4">
+            <p class="hero-kicker">Workshop details</p>
+            <h1 class="hero-title h3 mb-2">{{ workshop.workshop_type }}</h1>
+            <p class="hero-copy mb-0">Track status, participants, and discussion in one place.</p>
+        </div>
+
+        <div class="card p-2 p-md-3 mb-4">
+            <table class="table profile-kv-table mb-0">
+                <tbody>
+                    <tr>
+                        <th>Workshop type</th>
+                        <td><a href="{% url 'workshop_app:workshop_type_details' workshop.workshop_type_id %}">{{ workshop.workshop_type }}</a></td>
+                    </tr>
+                    <tr>
+                        <th>Date</th>
+                        <td>{{ workshop.date }}</td>
+                    </tr>
+                    <tr>
+                        <th>Coordinator</th>
+                        <td>{{ workshop.coordinator.get_full_name|title }}</td>
+                    </tr>
+                    <tr>
+                        <th>Status</th>
+                        <td>
+                            {% if workshop.status %}
+                                <span class="badge badge-success">{{ workshop.get_status }}</span>
+                            {% else %}
+                                <span class="badge badge-warning">{{ workshop.get_status }}</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% if workshop.status %}
+                    <tr>
+                        <th>Instructor</th>
+                        <td>{{ workshop.instructor.get_full_name|title }}</td>
+                    </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="card mb-4">
+            <form method="post" class="form-stack">
+                {% csrf_token %}
+                <div class="card-header">
+                    <div class="font-weight-bold">Post a comment</div>
+                    {% if request.user.profile.position == 'instructor' %}
+                        <div class="mt-2 text-muted">
+                            {{ form.public }} Public
+                            <span class="ml-1">(Non-public comments are visible only to instructors)</span>
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="card-body">
+                    {{ form.comment }}
+                </div>
+                <div class="px-3 pb-3 text-right">
+                    <button type="submit" class="btn btn-primary btn-md">Post</button>
+                </div>
+            </form>
+        </div>
+
+        <h2 class="h5 table-heading mb-3">Comments</h2>
+        {% for comment in workshop_comments %}
+            <div class="card my-2">
+                <div class="card-header">
+                    <div class="comment-meta">
+                        <a class="font-weight-bold" href="{% url 'workshop_app:view_profile' comment.author_id %}">{{ comment.author }}</a>
+                        {% if not comment.public %}
+                            <span class="badge badge-dark">Hidden</span>
+                        {% endif %}
+                        <span class="text-muted">{{ comment.created_date }}</span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <p class="mb-0">{{ comment.comment }}</p>
+                </div>
+            </div>
+        {% empty %}
+            <div class="empty-state">No comments yet. Start the discussion with the first update.</div>
+        {% endfor %}
+    </section>
+
+{% endblock %}

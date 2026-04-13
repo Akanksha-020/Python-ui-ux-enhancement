@@ -1,0 +1,41 @@
+{% extends 'workshop_app/base.html' %}
+
+{% block title %}
+    View Workshop details
+{% endblock %}
+
+{% block content %}
+    <section class="container dashboard-shell">
+        <div class="hero-banner hero-banner--compact mb-4">
+            <p class="hero-kicker">Workshop type</p>
+            <h1 class="hero-title h3 mb-2">{{ workshop_type.name }}</h1>
+            <p class="hero-copy mb-0">Duration, summary, and terms for this workshop format.</p>
+        </div>
+
+        <div class="card p-2 p-md-3">
+            <table class="table profile-kv-table mb-0">
+                <tbody>
+                    <tr>
+                        <th>Workshop name</th>
+                        <td>{{ workshop_type.name }}</td>
+                    </tr>
+                    <tr>
+                        <th>Duration</th>
+                        <td>{{ workshop_type.duration }} day(s)</td>
+                    </tr>
+                    <tr>
+                        <th>Description</th>
+                        <td>{{ workshop_type.description }}</td>
+                    </tr>
+                    <tr>
+                        <th>Terms and conditions</th>
+                        <td>{{ workshop_type.terms_and_conditions }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+{% endblock %}
+
+

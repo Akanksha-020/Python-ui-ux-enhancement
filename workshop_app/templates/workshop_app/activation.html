@@ -1,0 +1,48 @@
+{% extends 'workshop_app/base.html' %}
+
+{% block title %}
+    Awaiting activation
+{% endblock %}
+
+{% block content %}
+    <section class="container auth-shell">
+        <div class="row justify-content-center">
+            <div class="col-md-10 col-lg-8">
+                {% if status == '1' %}
+                    <script type="text/javascript">
+                        window.setTimeout(function () {
+                            location.href = "{% url 'workshop_app:register' %}"
+                        }, 3000);
+                    </script>
+                {% elif not status %}
+                    <script type="text/javascript">
+                        window.setTimeout(function () {
+                            location.href = "{% url 'workshop_app:logout' %}"
+                        }, 5000);
+                    </script>
+                {% endif %}
+
+                <div class="card auth-card">
+                    <div class="card-body p-4 p-md-5">
+                        {% if status == '2' %}
+                            <h1 class="h4 mb-3">Email already verified</h1>
+                            <p class="mb-0">Your email is already verified. Continue to <a href="{% url 'workshop_app:index' %}">dashboard</a>.</p>
+                        {% elif status == '1' %}
+                            <h1 class="h4 mb-3">Activation expired</h1>
+                            <p class="mb-0">Your activation window has expired. Redirecting you to registration.</p>
+                        {% elif status == '0' %}
+                            <h1 class="h4 mb-3">Account activated</h1>
+                            <p class="mb-0">Your account is active now. Continue to <a href="{% url 'workshop_app:index' %}">login</a>.</p>
+                        {% else %}
+                            <h1 class="h4 mb-3">Activation pending</h1>
+                            <p class="mb-2">
+                                An activation link was sent to your email and remains valid for <strong>24 hours</strong>.
+                            </p>
+                            <p class="mb-0 text-muted">You will be logged out automatically after a short delay.</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

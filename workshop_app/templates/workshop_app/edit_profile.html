@@ -1,0 +1,45 @@
+{% extends "workshop_app/base.html" %}
+
+{% block title %}
+	Edit Profile
+{% endblock %}
+
+{% block content %}
+  <section class="container dashboard-shell">
+    <div class="hero-banner hero-banner--compact mb-4">
+      <p class="hero-kicker">Account settings</p>
+      <h1 class="hero-title h3 mb-2">Edit Profile</h1>
+      <p class="hero-copy mb-0">Keep your institute and contact details up to date so coordinators and instructors can reach you quickly.</p>
+    </div>
+
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+        <div class="card auth-card">
+          <div class="card-body p-4 p-md-5">
+            <form method="post" class="form-stack" novalidate>
+              {% csrf_token %}
+
+              {% for field in form %}
+                <div class="form-group mb-3">
+                  <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                  {{ field }}
+                  {% if field.help_text %}
+                    <small class="form-text text-muted">{{ field.help_text }}</small>
+                  {% endif %}
+                  {% for error in field.errors %}
+                    <div class="text-danger mt-1">{{ error|escape }}</div>
+                  {% endfor %}
+                </div>
+              {% endfor %}
+
+              <div class="d-flex flex-wrap justify-content-between mt-4">
+                <button class="btn btn-primary mb-2" type="submit">Save Profile</button>
+                <a class="btn btn-outline-secondary mb-2" href="{% url 'workshop_app:view_own_profile' %}">Cancel</a>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+{% endblock %}

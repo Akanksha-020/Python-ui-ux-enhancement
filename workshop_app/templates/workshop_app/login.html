@@ -1,0 +1,63 @@
+{% extends 'workshop_app/base.html' %}
+
+{% block title %}
+    Login
+{% endblock %}
+
+{% block content %}
+    <section class="container auth-shell">
+        <div class="row justify-content-center align-items-center">
+            <div class="col-lg-5 mb-4 mb-lg-0">
+                <div class="hero-banner hero-banner--auth">
+                    <p class="hero-kicker">Welcome back</p>
+                    <h1 class="hero-title h3">FOSSEE Workshop Portal</h1>
+                    <p class="hero-copy mb-0">
+                        Plan workshops, track approvals, and manage your workshop pipeline from one place.
+                    </p>
+                </div>
+            </div>
+            <div class="col-md-8 col-lg-5">
+                <div class="card auth-card">
+                    <div class="card-body p-4">
+                        <h2 class="h5 mb-3">Sign in to continue</h2>
+                        <form method="post" novalidate>
+                            {% csrf_token %}
+                            {% if form.errors %}
+                                {% for field in form %}
+                                    {% for error in field.errors %}
+                                        <div class="alert alert-dismissible alert-danger">
+                                            <button type="button" class="close" data-dismiss="alert">
+                                                <i class="fa fa-close"></i>
+                                            </button>
+                                            <strong>{{ error|escape }}</strong>
+                                        </div>
+                                    {% endfor %}
+                                {% endfor %}
+                                {% for error in form.non_field_errors %}
+                                    <div class="alert alert-dismissible alert-danger">
+                                        <button type="button" class="close" data-dismiss="alert">
+                                            <i class="fa fa-close"></i>
+                                        </button>
+                                        <strong>{{ error|escape }}</strong>
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+                            <div class="form-group">
+                                <label for="id_username">Username</label>
+                                {{ form.username }}
+                            </div>
+                            <div class="form-group">
+                                <label for="id_password">Password</label>
+                                {{ form.password }}
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-block">Sign in</button>
+                        </form>
+                        <div class="dropdown-divider my-3"></div>
+                        <a class="dropdown-item px-0" href="{% url 'workshop_app:register' %}">New around here? Sign up</a>
+                        <a class="dropdown-item px-0" href="{% url 'password_reset' %}">Forgot password?</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

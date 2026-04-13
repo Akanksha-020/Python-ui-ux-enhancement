@@ -1,0 +1,44 @@
+{% extends 'workshop_app/base.html' %}
+
+{% block title %}
+    Add new Workshop type
+{% endblock %}
+
+{% block content %}
+    <section class="container dashboard-shell">
+        <div class="hero-banner hero-banner--compact mb-4">
+            <p class="hero-kicker">Workshop catalog</p>
+            <h1 class="hero-title h3 mb-2">New Workshop Type</h1>
+            <p class="hero-copy mb-0">Define the workshop format once so coordinators can propose it with the right expectations.</p>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-lg-9">
+                <div class="card auth-card">
+                    <div class="card-body p-4 p-md-5">
+                        <form method="post" class="form-stack" novalidate>
+                            {% csrf_token %}
+
+                            {% for field in form %}
+                                <div class="form-group mb-3">
+                                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                                    {{ field }}
+                                    {% if field.help_text %}
+                                        <small class="form-text text-muted">{{ field.help_text }}</small>
+                                    {% endif %}
+                                    {% for error in field.errors %}
+                                        <div class="text-danger mt-1">{{ error|escape }}</div>
+                                    {% endfor %}
+                                </div>
+                            {% endfor %}
+
+                            <div class="text-right mt-4">
+                                <button type="submit" class="btn btn-primary">Create</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

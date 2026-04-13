@@ -1,0 +1,130 @@
+{% extends "workshop_app/base.html" %}
+{% load static %}
+
+{% block title %}
+    Workshop Status
+{% endblock %}
+
+{% block extra-dependencies %}
+    <link rel="stylesheet" href="{% static 'workshop_app/css/jquery-ui.css' %}" type="text/css"/>
+    <script src="{% static 'workshop_app/js/jquery-ui.min.js' %}"></script>
+{% endblock %}
+{% block extra-custom-scripts %}
+    {% load static %}
+    <script src="{% static 'workshop_app/js/datepicker.js' %}"></script>
+{% endblock %}
+
+
+{% block content %}
+    {% if not workshops %}
+        <div class="container dashboard-shell">
+            <div class="jumbotron mb-0">
+                <h1 class="h3">Welcome {{ user.first_name }}</h1>
+                <p class="mb-0">Your workshop information will appear here. Explore the workshop list and accept sessions based on your expertise and availability.</p>
+            </div>
+        </div>
+    {% else %}
+        <div class="container dashboard-shell mb-4">
+            <div class="hero-banner hero-banner--compact">
+                <p class="hero-kicker">Instructor dashboard</p>
+                <h1 class="hero-title h3 mb-2">Workshop Status</h1>
+                <p class="hero-copy mb-0">Track accepted and pending workshops in one place.</p>
+            </div>
+        </div>
+
+        <div class="container">
+            <h2 class="h5 text-center table-heading"><strong>Workshops Accepted</strong></h2>
+            <div class="card p-2 p-md-3 mb-4">
+            <table class="table table-striped table-responsive-sm mb-0">
+                <thead>
+                <tr>
+                    <th>Coordinator Name</th>
+                    <th>Institute</th>
+                    <th>Workshop Name</th>
+                    <th>Workshop Day</th>
+                    <th>Status</th>
+                </tr>
+                </thead>
+                {% for workshop in workshops %}
+                    <tbody>
+                    <tr>
+                        {% if workshop.status %}
+                            <td>
+                                <a href="{% url 'workshop_app:view_profile' workshop.coordinator.id %}">
+                                    {{ workshop.coordinator.get_full_name }}</a>
+                            </td>
+                            <td>{{ workshop.coordinator.profile.institute }}</td>
+                            <td>{{ workshop.workshop_type |capfirst }}</td>
+                            <td>{{ workshop.date | date }}
+
+                                {% if workshop.date > today %}
+                                    <span class="material-icons datepicker btn"
+                                          data-toggle="popinfo"
+                                          title="Note"
+                                          data-content="Click here to change date"
+                                          onclick="changeDate('R,{{ workshop.date| safe }}, {{ forloop.counter }}')">event</span>
+                                    <div class="myDialogR{{ forloop.counter }}" style="display: none;"
+                                         title="Select New Date">
+                                        <form method="post" action="{% url 'workshop_app:change_workshop_date' workshop.id %}">
+                                            <input type="text" placeholder="New date" name="new_date"
+                                                   class="rDate{{ forloop.counter }}"/><br>
+                                            {% csrf_token %}
+                                            <button class="btn btn-primary btn-xs" type="submit">Save</button>
+                                        </form>
+                                    </div>
+                                {% endif %}
+                            </td>
+                            <td><span class="badge badge-success">{{ workshop.get_status }}</span></td>
+                        {% endif %}
+                    </tr>
+                    </tbody>
+
+                {% endfor %}
+
+            </table>
+            </div>
+        </div>
+
+        <div class="container">
+            <h2 class="h5 text-center table-heading"><strong>Workshops Proposed By Coordinators</strong></h2>
+            <div class="card p-2 p-md-3">
+            <table class="table table-striped table-responsive-sm mb-0">
+                <thead>
+                <tr>
+                    <th>Coordinator Name</th>
+                    <th>Institute</th>
+                    <th>Workshop Name</th>
+                    <th>Workshop Day</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+                </thead>
+                {% csrf_token %}
+                {% for workshop in workshops %}
+                    <tbody>
+                    <tr>
+                        {% if not workshop.status and workshop.tnc_accepted %}
+                            <td>
+                                <a href="{% url 'workshop_app:view_profile' workshop.coordinator.id %}">
+                                    {{ workshop.coordinator.get_full_name }}</a>
+                            </td>
+                            <td>{{ workshop.coordinator.profile.institute }}</td>
+                            <td>{{ workshop.workshop_type }}</td>
+                            <td>{{ workshop.date | date }}</td>
+                            <td><span class="badge badge-warning">{{ workshop.get_status }}</span></td>
+                            <td>
+                                <a href="{% url 'workshop_app:accept_workshop' workshop.id %}" class="btn btn-primary btn-sm"  onclick="return confirm('Once accepted you cannot reject, you have to personally contact the Coordinator if the workshop is to be cancelled. Are you sure you want to accept the workshop?')">
+                                    Accept
+                                </a>
+                            </td>
+                        {% endif %}
+                    </tr>
+                    </tbody>
+
+                {% endfor %}
+            </table>
+            </div>
+        </div>
+    {% endif %}
+
+{% endblock %}
