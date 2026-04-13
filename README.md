@@ -102,21 +102,17 @@ Approach used:
 
 ## Visual Showcase
 
-Add screenshots to these paths and update as needed:
+<img width="754" height="1125" alt="Screenshot 2026-04-13 192140" src="https://github.com/user-attachments/assets/83a32635-8e80-45da-b695-51bffa71d714" />
+<img width="751" height="1122" alt="Screenshot 2026-04-13 192150" src="https://github.com/user-attachments/assets/447d54a5-d08b-4f3c-add4-73c7e1f8b6e7" />
+<img width="755" height="1121" alt="Screenshot 2026-04-13 192158" src="https://github.com/user-attachments/assets/4a1db216-ad9d-4c8c-930b-d68f46985120" />
+<img width="750" height="1123" alt="Screenshot 2026-04-13 192211" src="https://github.com/user-attachments/assets/761e8414-cb3f-478e-8efd-a0c54946090e" />
+<img width="754" height="1129" alt="Screenshot 2026-04-13 192241" src="https://github.com/user-attachments/assets/c2efff9f-d300-46d4-aa1e-3c407a051f47" />
+<img width="1919" height="1066" alt="Screenshot 2026-04-13 192258" src="https://github.com/user-attachments/assets/02176bdc-c479-47ee-a8d4-d51be217ad19" />
+<img width="1915" height="1065" alt="Screenshot 2026-04-13 192315" src="https://github.com/user-attachments/assets/688a9917-ebc7-434e-8bef-b51d5fcd5ed9" />
+<img width="1919" height="1067" alt="Screenshot 2026-04-13 192325" src="https://github.com/user-attachments/assets/0c28d33c-c742-43e4-b947-54d567f18ed0" />
+<img width="1919" height="1078" alt="Screenshot 2026-04-13 192354" src="https://github.com/user-attachments/assets/470b3603-492a-4534-9a58-e8274d778b99" />
+<img width="1919" height="1073" alt="Screenshot 2026-04-13 192416" src="https://github.com/user-attachments/assets/d5bd4c98-3e67-4c0b-b5b0-ea183011d8e9" />
 
-1. `docs/screenshots/before-login.png`
-2. `docs/screenshots/after-login.png`
-3. `docs/screenshots/before-dashboard.png`
-4. `docs/screenshots/after-dashboard.png`
-
-Example embed format:
-
-```md
-![Before Login](docs/screenshots/before-login.png)
-![After Login](docs/screenshots/after-login.png)
-![Before Dashboard](docs/screenshots/before-dashboard.png)
-![After Dashboard](docs/screenshots/after-dashboard.png)
-```
 
 ## Notes
 
